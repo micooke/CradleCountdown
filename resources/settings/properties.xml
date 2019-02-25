@@ -1,0 +1,5 @@
+<properties>
+	<property id="CoreSelection" type="number">0x000001</property>
+	<property id="ShowBattery" type="boolean">true</property>
+	<property id="ShowNotifications" type="boolean">true</property>
+</properties>

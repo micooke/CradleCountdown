@@ -1,0 +1,10 @@
+<strings>
+    <string id="AppName">Cradle Countdown</string>
+    
+    <string id="CoreSelectionTitle">Core Selection</string>
+    <string id="ShowBatteryTitle">Display Battery Percentage</string>
+    <string id="ShowNotificationsTitle">Display Notification Count</string>
+    
+    <string id="PureCore">Pure Core</string>
+    <string id="BlackflameCore">Blackflame Core</string>
+</strings>

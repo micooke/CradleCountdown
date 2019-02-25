@@ -1,0 +1,16 @@
+<settings>
+	<setting propertyKey="@Properties.CoreSelection" title="@Strings.CoreSelectionTitle">
+        <settingConfig type="list">
+            <listEntry value="0x000000">@Strings.PureCore</listEntry>
+            <listEntry value="0x000001">@Strings.BlackflameCore</listEntry>
+        </settingConfig>
+    </setting>
+    
+    <setting propertyKey="@Properties.ShowBattery" title="@Strings.ShowBatteryTitle">
+        <settingConfig type="boolean"/>
+    </setting>
+	
+	<setting propertyKey="@Properties.ShowNotifications" title="@Strings.ShowNotificationsTitle">
+        <settingConfig type="boolean"/>
+    </setting>
+</settings>
