@@ -1,7 +1,7 @@
 <properties>
 	<property id="BookReleaseTitle" type="string">Uncrowned</property>
-	<property id="BookReleaseDate" type="string">300519</property>
-	<property id="BookReleaseTime" type="string">1200</property>
+	<property id="BookReleaseDate" type="string">200919</property>
+	<property id="BookReleaseTime" type="string">300</property>
 	<property id="BookReleaseTimezone" type="string">-500</property>
 	<property id="CoreSelection" type="number">0x000001</property>
 	<property id="ShowBattery" type="boolean">true</property>

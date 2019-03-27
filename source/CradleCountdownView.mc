@@ -48,8 +48,8 @@ class CradleCountdownView extends Ui.WatchFace {
   	
   	// UTC time of 1st Mar @ 3 AM in Florida, USA
   	hidden var release_title = "Uncrowned";
-	hidden var release_date_DDMMYY = 300519;
-	hidden var release_time_HHMM = 1200;
+	hidden var release_date_DDMMYY = 200919;
+	hidden var release_time_HHMM = 300;
 	hidden var release_timezone_HHMM = -500;
 		
 	hidden var release_date;
