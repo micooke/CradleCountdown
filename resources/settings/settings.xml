@@ -1,4 +1,20 @@
 <settings>
+	<setting propertyKey="@Properties.BookReleaseTitle" title="@Strings.ReleaseTitle">
+        <settingConfig type="alphaNumeric"/>
+    </setting>
+
+	<setting propertyKey="@Properties.BookReleaseDate" title="@Strings.ReleaseDate">
+        <settingConfig type="alphaNumeric"/>
+    </setting>
+    
+	<setting propertyKey="@Properties.BookReleaseTime" title="@Strings.ReleaseTime">
+        <settingConfig type="alphaNumeric"/>
+    </setting>
+    
+	<setting propertyKey="@Properties.BookReleaseTimezone" title="@Strings.ReleaseTimezone">
+        <settingConfig type="alphaNumeric"/>
+    </setting>
+    
 	<setting propertyKey="@Properties.CoreSelection" title="@Strings.CoreSelectionTitle">
         <settingConfig type="list">
             <listEntry value="0x000000">@Strings.PureCore</listEntry>

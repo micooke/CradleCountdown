@@ -47,16 +47,11 @@ class CradleCountdownView extends Ui.WatchFace {
   	hidden var halfScreenWidth, halfScreenHeight;
   	
   	// UTC time of 1st Mar @ 3 AM in Florida, USA
-  	hidden var release_title = "Underlord";
-	hidden var release_date_settings = {
-	    :year   => 2019,
-	    :month  => 3,
-	    :day    => 1,
-	    :hour   => 8, // UTC offset, in this case for CST
-	    :minute   => 00,
-	    :second   => 0
-	};
-	
+  	hidden var release_title = "Uncrowned";
+	hidden var release_date_DDMMYY = 300519;
+	hidden var release_time_HHMM = 1200;
+	hidden var release_timezone_HHMM = -500;
+		
 	hidden var release_date;
 	
 	function initialize()
@@ -68,8 +63,6 @@ class CradleCountdownView extends Ui.WatchFace {
 		smallDateFont = Ui.loadResource(Rez.Fonts.DigitaltSmall);
 		timeCheckerFont = Ui.loadResource(Rez.Fonts.DigitaltChecker2);
 		dateFont = Ui.loadResource(Rez.Fonts.DigitaltMedium);
-		
-		release_date = Time.Gregorian.moment(release_date_settings);
 		
 		hasPartialUpdate = ( Toybox.WatchUi.WatchFace has :onPartialUpdate );
         doPartialUpdate = hasPartialUpdate; 
@@ -89,13 +82,24 @@ class CradleCountdownView extends Ui.WatchFace {
 		dateVerticalCentre = halfScreenHeight - 0.5*dateFontHeight;
   		smallDateVerticalCentre = halfScreenHeight - 0.5*smallDateFontHeight;
 	}
+	function getPropertyAsNumber(propertyName, defaultValue)
+	{
+		var value = App.getApp().getProperty(propertyName);
+		if ((value == null) or (value.toNumber() == null))
+		{
+			return defaultValue;
+		}
+		else
+		{
+			return value.toNumber();
+		}
+	}
 	
 	function updateSettings() {
 		// settings menu
-		ShowBattery = Application.getApp().getProperty("ShowBattery");
-		ShowNotifications = Application.getApp().getProperty("ShowNotifications");
-		
-		CoreSelection = Application.getApp().getProperty("CoreSelection");
+		CoreSelection = App.getApp().getProperty("CoreSelection");
+		ShowBattery = App.getApp().getProperty("ShowBattery");
+		ShowNotifications = App.getApp().getProperty("ShowNotifications");
 		
 		if (CoreSelection == 0) // Pure Core
 		{
@@ -107,6 +111,52 @@ class CradleCountdownView extends Ui.WatchFace {
 		}
 		
 		ActiveColour = HourColour;
+		
+		// get the book release title
+		release_title = App.getApp().getProperty("BookReleaseTitle");
+		
+		// get the book release date
+		release_date_DDMMYY = getPropertyAsNumber("BookReleaseDate", release_date_DDMMYY);
+		release_time_HHMM = getPropertyAsNumber("BookReleaseTime", release_time_HHMM);
+		
+		var temp_releaseDate = release_date_DDMMYY;
+		var release_date_DD = temp_releaseDate / 10000; temp_releaseDate -=  10000 *release_date_DD; 
+		var release_date_MM = temp_releaseDate / 100; temp_releaseDate -=  100 *release_date_MM;
+		var release_date_YY = 2000 + temp_releaseDate;
+		
+		var release_time_HH = release_time_HHMM / 100;
+		var release_time_MM = release_time_HHMM % 100;
+		
+		//System.print(release_date_DD); System.print("/"); System.print(release_date_MM); System.print("/"); System.print(release_date_YY); System.print(" @ ");
+		//System.print(release_time_HH); System.print(":"); System.println(release_time_MM);
+	
+		var release_date_settings = {
+		    :year   => release_date_YY,
+		    :month  => release_date_MM,
+		    :day    => release_date_DD,
+		    :hour   => release_time_HH,
+		    :minute   => release_time_MM,
+		    :second   => 0
+			};
+			
+		release_date = Time.Gregorian.moment(release_date_settings);
+		
+		// add the timezone offset
+		release_timezone_HHMM = getPropertyAsNumber("BookReleaseTimezone", release_timezone_HHMM);
+		
+		var release_timezone_HH = release_timezone_HHMM.abs() / 100; release_timezone_HH %= 60; 
+		var release_timezone_MM = release_timezone_HHMM.abs() % 100; release_timezone_MM %= 60;
+		var releaseTimezone = new Time.Duration((release_timezone_HH*60 + release_timezone_MM)*60);
+		System.print(release_timezone_HHMM);
+		
+		if (release_timezone_HHMM < 0)
+		{
+			release_date = release_date.add(releaseTimezone);
+		}
+		else
+		{
+			release_date = release_date.subtract(releaseTimezone);
+		}
 		
 		// watch settings
 		var deviceSettings = System.getDeviceSettings();
@@ -243,8 +293,6 @@ class CradleCountdownView extends Ui.WatchFace {
         	var days = (seconds / Time.Gregorian.SECONDS_PER_DAY).toNumber(); seconds -= (days * Time.Gregorian.SECONDS_PER_DAY);
         	var hours = (seconds / Time.Gregorian.SECONDS_PER_HOUR).toNumber(); seconds -= (hours * Time.Gregorian.SECONDS_PER_HOUR);
         	var minutes = (seconds / Time.Gregorian.SECONDS_PER_MINUTE).toNumber(); seconds -= (minutes * Time.Gregorian.SECONDS_PER_MINUTE);
-        
-	    	var SecOffset = halfScreenWidth+3*smallDateFontHeight;
 	        
 	        // day | hour:minute:second stacked vertically
 	    	var ttgTimeString = Lang.format("$1$:$2$:$3$", [hours.format("%02d"), minutes.format("%02d"), seconds.format("%02d")]);
@@ -255,7 +303,7 @@ class CradleCountdownView extends Ui.WatchFace {
 	    		dayString += ((days>1) | (days == 0))?"S ":" ";
 	    		
 	    		// clear the previous partial update
-	    		dc.setClip(SecOffset, halfScreenHeight + timeFontHeight+4, 1.5*smallDateFontHeight, smallDateFontHeight-2);
+	    		dc.setClip(halfScreenWidth, halfScreenHeight + timeFontHeight+4, 0.70*halfScreenWidth, smallDateFontHeight-2);
 	        	dc.setColor(backgroundColour, backgroundColour);
 				dc.clear();
 				dc.clearClip();
@@ -269,7 +317,7 @@ class CradleCountdownView extends Ui.WatchFace {
 	    	}
 	    	else
 	    	{
-				dc.setClip(SecOffset, halfScreenHeight + timeFontHeight+4, 1.6*smallDateFontHeight, smallDateFontHeight-2);
+				dc.setClip(halfScreenWidth, halfScreenHeight + timeFontHeight+4, 0.70*halfScreenWidth, smallDateFontHeight-2);
 	        	dc.setColor(backgroundColour, backgroundColour);
 				dc.clear();
 				dc.setColor(colour, Gfx.COLOR_TRANSPARENT);

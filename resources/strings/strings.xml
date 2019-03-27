@@ -5,6 +5,11 @@
     <string id="ShowBatteryTitle">Display Battery Percentage</string>
     <string id="ShowNotificationsTitle">Display Notification Count</string>
     
+    <string id="ReleaseTitle">Release title</string>
+    <string id="ReleaseDate">Release date (DDMMYY)</string>
+    <string id="ReleaseTime">Release time (HHMM)</string>
+    <string id="ReleaseTimezone">Release timezone (HHMM)</string>
+    
     <string id="PureCore">Pure Core</string>
     <string id="BlackflameCore">Blackflame Core</string>
 </strings>
